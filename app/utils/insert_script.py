@@ -16,6 +16,9 @@ def read_weather_csv(file_path):
 
     return df
 
+def should_go_outside(wind_kph: float) -> bool:
+    return wind_kph < 20
+
 def fill_weather(df: pd.DataFrame):
     session: Session = SessionLocal()
 
@@ -33,7 +36,8 @@ def fill_weather(df: pd.DataFrame):
                 wind_kph=float(row['wind_kph']) if not pd.isna(row['wind_kph']) else None,
                 wind_direction=WindDirection[row['wind_direction']] if row['wind_direction'] in WindDirection.__members__ else None,
                 last_updated=pd.to_datetime(row['last_updated']).date() if not pd.isna(row['last_updated']) else None,
-                sunrise=pd.to_datetime(row['sunrise']).time() if not pd.isna(row['sunrise']) else None
+                sunrise=pd.to_datetime(row['sunrise']).time() if not pd.isna(row['sunrise']) else None,
+                go_outside = should_go_outside(float(row['wind_kph'])) if not pd.isna(row['wind_kph']) else None
             )
             session.add(wind_measurement)
 

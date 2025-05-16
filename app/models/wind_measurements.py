@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, Date, Time, Enum, ForeignKey
+from sqlalchemy import Column, Integer, Float, Date, Time, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from app.models import Base, WindDirection
 
@@ -12,5 +12,6 @@ class WindMeasurements(Base):
     wind_direction = Column(Enum(WindDirection))
     last_updated = Column(Date)
     sunrise = Column(Time)
+    go_outside = Column(Boolean)
 
     weather = relationship("Weather", back_populates="wind_measurements")
